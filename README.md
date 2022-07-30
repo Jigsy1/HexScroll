@@ -8,4 +8,4 @@ It's fairly straightforward. The horizonal scrollbars update the background colo
 
 You can also change the number in the textbox to the side if you want to quickly find out the Hex code.
 
-Copy simply copys the Hex to the clipboard.
+Copy simply copies the Hex to the clipboard.

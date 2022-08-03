@@ -6,12 +6,17 @@ Begin VB.Form FrmHex
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   5895
-   Icon            =   "FrmHex.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    ScaleHeight     =   1680
    ScaleWidth      =   5895
    StartUpPosition =   2  'CenterScreen
+   Begin VB.Timer tmrNoteClear 
+      Enabled         =   0   'False
+      Interval        =   2000
+      Left            =   120
+      Top             =   1200
+   End
    Begin VB.CommandButton CmdCopy 
       Caption         =   "C&opy"
       Height          =   375
@@ -111,11 +116,15 @@ End Sub
 
 Private Sub CmdCopy_Click()
   Clipboard.Clear
-  ' I doubt this has any use; but just incase...
+  ' `-> I doubt this has any use; but just incase...
   Clipboard.SetText TxtHex.Text
+  Me.Caption = Me.Caption & " - Copied to clipboard"
+  tmrNoteClear.Enabled = True
 End Sub
 
 Private Sub Form_Load()
+  Me.Tag = Me.Caption
+  ' `-> Store the title in "memory" for easy changing if someone clicks copy
   Me.BackColor = RGB(HsRed.Value, HsGreen.Value, HsBlue.Value)
   TxtHex.Text = "#" & IIf(Len(Hex(HsRed.Value)) <= 1, "0" & Hex(HsRed.Value), Hex(HsRed.Value)) & IIf(Len(Hex(HsGreen.Value)) <= 1, "0" & Hex(HsGreen.Value), Hex(HsGreen.Value)) & IIf(Len(Hex(HsBlue.Value)) <= 1, "0" & Hex(HsBlue.Value), Hex(HsBlue.Value))
   TxtRGB.Text = HsRed.Value & "," & HsGreen.Value & "," & HsBlue.Value
@@ -144,11 +153,16 @@ End Sub
 
 Private Sub Form_Terminate()
   End
-  ' I doubt this has any use; but just incase...
+  ' `-> I doubt this has any use; but just incase...
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
   End
+End Sub
+
+Private Sub tmrNoteClear_Timer()
+  Me.Caption = Me.Tag
+  tmrNoteClear.Enabled = False
 End Sub
 
 Private Sub TxtBlue_Change()
@@ -173,7 +187,6 @@ Private Sub TxtGreen_Change()
   End If
 End Sub
 
-' EOF
 Private Sub TxtRed_Change()
   If IsNull(TxtRed.Text) = False And TxtRed.Text <> "" And IsNumeric(TxtRed.Text) = True Then
     If TxtRed.Text >= 0 And TxtRed.Text <= 255 Then
@@ -184,3 +197,5 @@ Private Sub TxtRed_Change()
     End If
   End If
 End Sub
+
+' EOF

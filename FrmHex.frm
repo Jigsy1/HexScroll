@@ -1,15 +1,16 @@
 VERSION 5.00
 Begin VB.Form FrmHex 
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "Hexadecimal Color Scroller"
+   Caption         =   "Hex Color Scroller"
    ClientHeight    =   1680
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   5895
+   ClientWidth     =   5880
+   KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    ScaleHeight     =   1680
-   ScaleWidth      =   5895
+   ScaleWidth      =   5880
    StartUpPosition =   2  'CenterScreen
    Begin VB.Timer tmrNoteClear 
       Enabled         =   0   'False
@@ -20,10 +21,10 @@ Begin VB.Form FrmHex
    Begin VB.CommandButton CmdCopy 
       Caption         =   "C&opy"
       Height          =   375
-      Left            =   3480
+      Left            =   3000
       TabIndex        =   8
       Top             =   1200
-      Width           =   1095
+      Width           =   1335
    End
    Begin VB.TextBox TxtBlue 
       Alignment       =   2  'Center
@@ -75,10 +76,10 @@ Begin VB.Form FrmHex
    Begin VB.CommandButton CmdClose 
       Caption         =   "&Close"
       Height          =   375
-      Left            =   4680
+      Left            =   4440
       TabIndex        =   9
       Top             =   1200
-      Width           =   1095
+      Width           =   1335
    End
    Begin VB.HScrollBar HsBlue 
       Height          =   255
@@ -115,14 +116,24 @@ Private Sub CmdClose_Click()
 End Sub
 
 Private Sub CmdCopy_Click()
+  On Error GoTo endCopy
   Clipboard.Clear
   ' `-> I doubt this has any use; but just incase...
   Clipboard.SetText TxtHex.Text
   Me.Caption = Me.Caption & " - Copied to clipboard"
   tmrNoteClear.Enabled = True
+  Exit Sub
+
+endCopy:
+  MsgBox "Failed to copy to clipboard.", vbExclamation, "Error"
+End Sub
+
+Private Sub Form_KeyPress(KeyAscii As Integer)
+  If KeyAscii = vbKeyEscape Then End
 End Sub
 
 Private Sub Form_Load()
+  Me.Caption = Me.Caption & " v" & App.Major & "." & App.Minor & "." & App.Revision
   Me.Tag = Me.Caption
   ' `-> Store the title in "memory" for easy changing if someone clicks copy
   Me.BackColor = RGB(HsRed.Value, HsGreen.Value, HsBlue.Value)

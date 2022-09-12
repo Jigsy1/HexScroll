@@ -111,21 +111,37 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Private Function updateValues(redValue, greenValue, blueValue)
+  Me.BackColor = RGB(redValue, greenValue, blueValue)
+  If TxtRed.Text <> redValue Then TxtRed.Text = redValue
+  If TxtGreen.Text <> greenValue Then TxtGreen.Text = greenValue
+  If TxtBlue.Text <> blueValue Then TxtBlue.Text = blueValue
+  TxtHex.Text = "#" & IIf(Len(Hex(redValue)) <= 1, "0" & Hex(redValue), Hex(redValue)) & IIf(Len(Hex(greenValue)) <= 1, "0" & Hex(greenValue), Hex(greenValue)) & IIf(Len(Hex(blueValue)) <= 1, "0" & Hex(blueValue), Hex(blueValue))
+  TxtRGB.Text = redValue & "," & greenValue & "," & blueValue
+End Function
+
 Private Sub CmdClose_Click()
   End
 End Sub
 
 Private Sub CmdCopy_Click()
   On Error GoTo endCopy
-  Clipboard.Clear
-  ' `-> I doubt this has any use; but just incase...
-  Clipboard.SetText TxtHex.Text
-  Me.Caption = Me.Caption & " - Copied to clipboard"
-  tmrNoteClear.Enabled = True
+    Clipboard.Clear
+    ' `-> I doubt this has any use; but just incase...
+    Clipboard.SetText TxtHex.Text
+    Me.Caption = Me.Caption & " - Copied to clipboard"
+    tmrNoteClear.Enabled = True
   Exit Sub
 
 endCopy:
   MsgBox "Failed to copy to clipboard.", vbExclamation, "Error"
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+  If KeyCode = vbKeyF5 Then
+    Randomize
+    Call updateValues(Int(Val(Rnd * 256)), Int(Val(Rnd * 256)), Int(Val(Rnd * 256)))
+  End If
 End Sub
 
 Private Sub Form_KeyPress(KeyAscii As Integer)
@@ -135,31 +151,20 @@ End Sub
 Private Sub Form_Load()
   Me.Caption = Me.Caption & " v" & App.Major & "." & App.Minor & "." & App.Revision
   Me.Tag = Me.Caption
-  ' `-> Store the title in "memory" for easy changing if someone clicks copy
-  Me.BackColor = RGB(HsRed.Value, HsGreen.Value, HsBlue.Value)
-  TxtHex.Text = "#" & IIf(Len(Hex(HsRed.Value)) <= 1, "0" & Hex(HsRed.Value), Hex(HsRed.Value)) & IIf(Len(Hex(HsGreen.Value)) <= 1, "0" & Hex(HsGreen.Value), Hex(HsGreen.Value)) & IIf(Len(Hex(HsBlue.Value)) <= 1, "0" & Hex(HsBlue.Value), Hex(HsBlue.Value))
-  TxtRGB.Text = HsRed.Value & "," & HsGreen.Value & "," & HsBlue.Value
+  ' `-> Store the title in "memory" for easy changing if someone clicks copy.
+  Call updateValues(HsRed.Value, HsGreen.Value, HsBlue.Value)
 End Sub
 
 Private Sub HsBlue_Change()
-  TxtBlue.Text = HsBlue.Value
-  Me.BackColor = RGB(HsRed.Value, HsGreen.Value, HsBlue.Value)
-  TxtHex.Text = "#" & IIf(Len(Hex(HsRed.Value)) <= 1, "0" & Hex(HsRed.Value), Hex(HsRed.Value)) & IIf(Len(Hex(HsGreen.Value)) <= 1, "0" & Hex(HsGreen.Value), Hex(HsGreen.Value)) & IIf(Len(Hex(HsBlue.Value)) <= 1, "0" & Hex(HsBlue.Value), Hex(HsBlue.Value))
-  TxtRGB.Text = HsRed.Value & "," & HsGreen.Value & "," & HsBlue.Value
+  Call updateValues(HsRed.Value, HsGreen.Value, HsBlue.Value)
 End Sub
 
 Private Sub HsGreen_Change()
-  TxtGreen.Text = HsGreen.Value
-  Me.BackColor = RGB(HsRed.Value, HsGreen.Value, HsBlue.Value)
-  TxtHex.Text = "#" & IIf(Len(Hex(HsRed.Value)) <= 1, "0" & Hex(HsRed.Value), Hex(HsRed.Value)) & IIf(Len(Hex(HsGreen.Value)) <= 1, "0" & Hex(HsGreen.Value), Hex(HsGreen.Value)) & IIf(Len(Hex(HsBlue.Value)) <= 1, "0" & Hex(HsBlue.Value), Hex(HsBlue.Value))
-  TxtRGB.Text = HsRed.Value & "," & HsGreen.Value & "," & HsBlue.Value
+  Call updateValues(HsRed.Value, HsGreen.Value, HsBlue.Value)
 End Sub
 
 Private Sub HsRed_Change()
-  TxtRed.Text = HsRed.Value
-  Me.BackColor = RGB(HsRed.Value, HsGreen.Value, HsBlue.Value)
-  TxtHex.Text = "#" & IIf(Len(Hex(HsRed.Value)) <= 1, "0" & Hex(HsRed.Value), Hex(HsRed.Value)) & IIf(Len(Hex(HsGreen.Value)) <= 1, "0" & Hex(HsGreen.Value), Hex(HsGreen.Value)) & IIf(Len(Hex(HsBlue.Value)) <= 1, "0" & Hex(HsBlue.Value), Hex(HsBlue.Value))
-  TxtRGB.Text = HsRed.Value & "," & HsGreen.Value & "," & HsBlue.Value
+  Call updateValues(HsRed.Value, HsGreen.Value, HsBlue.Value)
 End Sub
 
 Private Sub Form_Terminate()
@@ -180,9 +185,7 @@ Private Sub TxtBlue_Change()
   If IsNull(TxtBlue.Text) = False And TxtBlue.Text <> "" And IsNumeric(TxtBlue.Text) = True Then
     If TxtBlue.Text >= 0 And TxtBlue.Text <= 255 Then
       HsBlue.Value = TxtBlue.Text
-      Me.BackColor = RGB(HsRed.Value, HsGreen.Value, HsBlue.Value)
-      TxtHex.Text = "#" & IIf(Len(Hex(HsRed.Value)) <= 1, "0" & Hex(HsRed.Value), Hex(HsRed.Value)) & IIf(Len(Hex(HsGreen.Value)) <= 1, "0" & Hex(HsGreen.Value), Hex(HsGreen.Value)) & IIf(Len(Hex(HsBlue.Value)) <= 1, "0" & Hex(HsBlue.Value), Hex(HsBlue.Value))
-      TxtRGB.Text = HsRed.Value & "," & HsGreen.Value & "," & HsBlue.Value
+      Call updateValues(HsRed.Value, HsGreen.Value, HsBlue.Value)
     End If
   End If
 End Sub
@@ -191,9 +194,7 @@ Private Sub TxtGreen_Change()
   If IsNull(TxtGreen.Text) = False And TxtGreen.Text <> "" And IsNumeric(TxtGreen.Text) = True Then
     If TxtGreen.Text >= 0 And TxtGreen.Text <= 255 Then
       HsGreen.Value = TxtGreen.Text
-      Me.BackColor = RGB(HsRed.Value, HsGreen.Value, HsBlue.Value)
-      TxtHex.Text = "#" & IIf(Len(Hex(HsRed.Value)) <= 1, "0" & Hex(HsRed.Value), Hex(HsRed.Value)) & IIf(Len(Hex(HsGreen.Value)) <= 1, "0" & Hex(HsGreen.Value), Hex(HsGreen.Value)) & IIf(Len(Hex(HsBlue.Value)) <= 1, "0" & Hex(HsBlue.Value), Hex(HsBlue.Value))
-      TxtRGB.Text = HsRed.Value & "," & HsGreen.Value & "," & HsBlue.Value
+      Call updateValues(HsRed.Value, HsGreen.Value, HsBlue.Value)
     End If
   End If
 End Sub
@@ -202,9 +203,7 @@ Private Sub TxtRed_Change()
   If IsNull(TxtRed.Text) = False And TxtRed.Text <> "" And IsNumeric(TxtRed.Text) = True Then
     If TxtRed.Text >= 0 And TxtRed.Text <= 255 Then
       HsRed.Value = TxtRed.Text
-      Me.BackColor = RGB(HsRed.Value, HsGreen.Value, HsBlue.Value)
-      TxtHex.Text = "#" & IIf(Len(Hex(HsRed.Value)) <= 1, "0" & Hex(HsRed.Value), Hex(HsRed.Value)) & IIf(Len(Hex(HsGreen.Value)) <= 1, "0" & Hex(HsGreen.Value), Hex(HsGreen.Value)) & IIf(Len(Hex(HsBlue.Value)) <= 1, "0" & Hex(HsBlue.Value), Hex(HsBlue.Value))
-      TxtRGB.Text = HsRed.Value & "," & HsGreen.Value & "," & HsBlue.Value
+      Call updateValues(HsRed.Value, HsGreen.Value, HsBlue.Value)
     End If
   End If
 End Sub

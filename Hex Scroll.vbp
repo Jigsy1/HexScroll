@@ -1,6 +1,7 @@
 Type=Exe
 Form=FrmHex.frm
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\WINXP\system32\stdole2.tlb#OLE Automation
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\WINXP\system32\stdole2.tlb#OLE Automation
+Form=frmAbout.frm
 IconForm="FrmHex"
 Startup="FrmHex"
 HelpFile=""
@@ -12,7 +13,7 @@ HelpContextID="0"
 CompatibleMode="0"
 MajorVer=1
 MinorVer=0
-RevisionVer=3
+RevisionVer=4
 AutoIncrementVer=0
 ServerSupportFiles=0
 VersionCompanyName="Jigsy"

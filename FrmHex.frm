@@ -4,7 +4,7 @@ Begin VB.Form FrmHex
    Caption         =   "Hex Color Scroller"
    ClientHeight    =   1680
    ClientLeft      =   45
-   ClientTop       =   330
+   ClientTop       =   615
    ClientWidth     =   5880
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
@@ -105,6 +105,27 @@ Begin VB.Form FrmHex
       Top             =   120
       Width           =   3375
    End
+   Begin VB.Menu menuFile 
+      Caption         =   "&File"
+      Begin VB.Menu menuExit 
+         Caption         =   "&Exit"
+         Shortcut        =   ^E
+      End
+   End
+   Begin VB.Menu menuAbout 
+      Caption         =   "&About"
+      Begin VB.Menu menuLicense 
+         Caption         =   "&License"
+         Shortcut        =   ^L
+      End
+      Begin VB.Menu menuSep 
+         Caption         =   "-"
+      End
+      Begin VB.Menu menuWebsite 
+         Caption         =   "&Website..."
+         Shortcut        =   ^W
+      End
+   End
 End
 Attribute VB_Name = "FrmHex"
 Attribute VB_GlobalNameSpace = False
@@ -174,6 +195,18 @@ End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
   End
+End Sub
+
+Private Sub menuExit_Click()
+  End
+End Sub
+
+Private Sub menuLicense_Click()
+  frmAbout.Visible = True
+End Sub
+
+Private Sub menuWebsite_Click()
+  CreateObject("WScript.Shell").Run frmAbout.lblLink.Caption
 End Sub
 
 Private Sub tmrNoteClear_Timer()

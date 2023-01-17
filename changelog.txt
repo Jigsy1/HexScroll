@@ -1,0 +1,25 @@
+v1.0.0.4:
+----------
+1. Added menu items (Exit, Website, etc.) and a pointless "About" form which just includes a copy of The Unlicense text.
+
+v1.0.0.3:
+----------
+1. Overhauled the code so it now calls a single function.
+2. Pressing F5 generates a random color scheme for you.
+
+v1.0.0.2:
+----------
+1. Renamed title to "Hex Color Scroller" and included version information.
+2. Added error checking to the copy button to prevent it from crashing if it fails to copy to clipboard.
+3. You can now end the program by pressing Escape (Esc).
+4. Other minor changes. (Uniform button width, etc.)
+
+v1.0.0.1:
+----------
+1. Removed the icon as it occured to me that I should have not included it.
+2. Reworded the properties.
+3. Made it so it notifies (via titlebar) that you have copied the #Hex to the clipboard.
+
+v1.0.0:
+----------
+1. Initial release.
